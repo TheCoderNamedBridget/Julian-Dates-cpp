@@ -3,7 +3,36 @@
 #include <iostream>
 using namespace std;
 
+int Greg2Julian( int mon, int day, int year )//pass m, d, y return julian
+{
+    int JD = day - 32075 + 1461*(year + 4800+(mon-14)/12)/4+367*
+        (mon-2-(mon-14)/12*12)/12-3*((year+4900+(mon-14)/12)/100)/4;
+    return JD;
+}
 
+void Julian2Greg( int JD, int & month, int & day, int & year )//pass in julian date and get m, d, y through parameter list and pass by ref
+{
+    int L;
+    int N;
+    int J;
+    int K;
+    int I;
+    L = JD + 68569;
+    N = 4 * L / 146097;
+    L = L - ( 146097 * N + 3 ) / 4;
+    I = 4000 * ( L + 1 ) / 1461001;
+    L = L - 1461 * I / 4 + 31;
+    J = 80 * L / 2447;
+    K = L - 2447 * J / 80;
+    L = J / 11;
+    J = J + 2 - 12 * L;
+    I = 100 * ( N - 49 ) + I + L;
+    
+    year = I;
+    month = J;
+    day = K;
+    //cout<<month<<" "<<day<<" "<<year<<endl;
+}
 
 MyDate::MyDate()
 {
@@ -124,14 +153,14 @@ int MyDate::getYear()
     return year;
 }
 
-int dayOfYear()//return number of days since current year began
+int MyDate::dayOfYear()//return number of days since current year began
 {
     //use julian dates 
     
     return 0;
 }
 
-string dayName()//return day of week, mondy, tuesday,...
+string MyDate::dayName()//return day of week, mondy, tuesday,...
 {
     //figure out today's name of the day
     //convert to julian
@@ -139,31 +168,33 @@ string dayName()//return day of week, mondy, tuesday,...
     //9/22/2020 = tuesday
     string dayName = "";
     int tuesdayRemainder = Greg2Julian( 9, 22, 2020 ) % 7;
-    if ( Greg2Julian( mont, day, year ) % 7 == 0 )
+    //cout<<tuesdayRemainder;
+    int gregDate = Greg2Julian( month, day, year );
+    if ( gregDate % 7 == tuesdayRemainder )
     {
         dayName = "Tuesday";
     }
-    else if ( Greg2Julian( mont, day, year ) % 7 == 1 )
+    else if ( gregDate % 7 == tuesdayRemainder + 1 )
     {
         dayName = "Wednesday";
     }
-    else if ( Greg2Julian( mont, day, year ) % 7 == 2 )
+    else if ( gregDate % 7 == tuesdayRemainder + 2 )
     {
         dayName = "Thursday";
     }
-    else if ( Greg2Julian( mont, day, year ) % 7 == 3 )
+    else if ( gregDate % 7 == tuesdayRemainder + 3 )
     {
         dayName = "Friday";
     }
-    else if ( Greg2Julian( mont, day, year ) % 7 == 4 )
+    else if ( gregDate % 7 == tuesdayRemainder + 4 )
     {
         dayName = "Saturday";
     }
-    else if ( Greg2Julian( mont, day, year ) % 7 == 5 )
+    else if ( gregDate % 7 == tuesdayRemainder + 5 )
     {
         dayName = "Sunday";
     }
-    else if ( Greg2Julian( mont, day, year ) % 7 == 6 )
+    else if ( gregDate % 7 == tuesdayRemainder - 1 )
     {
         dayName = "Monday";
     }
